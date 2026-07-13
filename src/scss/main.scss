@@ -1,3 +1,7 @@
 @use "./base/reset";
 @use "./base/common";
-@use "./base/container"
+@use "./base/container";
+@use "./sections/footer";
+@use "./sections/header";
+@use "./sections/main";
+@use "./sections/modal";
