@@ -1,0 +1,52 @@
+.list{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 50px;
+    column-gap: 53px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.event-card{
+    width: 198.0px;
+    height: 312.0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.img{
+    width: 180.0px;
+    height: 227.0px;
+    border-radius: 50px 0;
+}
+
+.name{
+    width: 183.0px;
+    height: 20.0px;
+    color: #DC56C5;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.date{
+    width: 82.0px;
+    height: 20.0px;
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.city{
+    width: 126.0px;
+    height: 17.0px;
+    color: #FFF;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+}
