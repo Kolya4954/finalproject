@@ -50,4 +50,58 @@ body {
   .container {
     width: 1200px;
   }
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 50px;
+  -moz-column-gap: 53px;
+       column-gap: 53px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-card {
+  width: 198px;
+  height: 312px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.img {
+  width: 180px;
+  height: 227px;
+  border-radius: 50px 0;
+}
+
+.name {
+  width: 183px;
+  height: 20px;
+  color: #DC56C5;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.date {
+  width: 82px;
+  height: 20px;
+  color: #FFF;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.city {
+  width: 126px;
+  height: 17px;
+  color: #FFF;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
 }/*# sourceMappingURL=main.css.map */
