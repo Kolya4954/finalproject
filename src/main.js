@@ -1,8 +1,8 @@
 import "./js/getEvent"
+import debounce from 'debounce';
 
-import "./js/getEvent"
-
-const listEl = document.querySelector(".list")
+const listEl = document.querySelector(".main-list")
+const keywordInputEl = document.querySelector(".header-input")
 
 const URL = "https://app.ticketmaster.com/discovery/v2/events.json";
 const API_KEY = "hXUd5IDKsavTl95aAOfGkyFDSk68VDlw";
@@ -11,9 +11,9 @@ let keyword = "";
 let country = "";
 let page = 1;
 
-async function getEvents() {
+async function getEvents(keyword, page) {
     const res = await fetch(
-        `${URL}?apikey=${API_KEY}&locale=*`
+        `${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}`
     )
     
     const data = await res.json();
@@ -22,7 +22,16 @@ async function getEvents() {
     return data._embedded?.events || []
 }
 
-getEvents()
+
+
+keywordInputEl.addEventListener("input", debounce(async () => {
+    const keyword = keywordInputEl.value.trim()
+
+    const res = await getEvents(keyword, page)
+
+    render(res)
+}, 500)
+)
 
 
 function render(arr) {
@@ -55,4 +64,3 @@ async function init() {
     render(events);
 }
 
-init()
