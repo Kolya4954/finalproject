@@ -52,9 +52,10 @@ body {
   }
 }
 
-.list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.main-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   row-gap: 50px;
   -moz-column-gap: 53px;
        column-gap: 53px;
@@ -65,7 +66,7 @@ body {
 
 .event-card {
   width: 198px;
-  height: 312px;
+  height: 322px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,10 +87,11 @@ body {
   text-align: center;
   font-size: 16px;
   font-weight: 700;
+  min-width: 0;
 }
 
 .date {
-  width: 82px;
+  width: 95px;
   height: 20px;
   color: #FFF;
   text-align: center;
