@@ -38,12 +38,11 @@ function render(arr) {
     const item = arr.map((e) => {
       
     const image = e.images[0]?.url;
-    const name = e.name;
+    const name =e.name.length > 18? e.name.slice(0, 18) + "...": e.name;
     const date = e.dates.start.localDate;
     const city = e._embedded?.venues[0]?.city?.name || "Unknown";
     return `
         <li class="event-card">
-
             <img src="${image}" alt="${name}" class="img">
 
             <h2 class="name">${name}</h2>
@@ -51,7 +50,6 @@ function render(arr) {
             <p class="date">${date}</p>
 
             <p class="city">${city}</p>
-
         </li>`
     }).join("");
 
