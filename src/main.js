@@ -79,7 +79,7 @@ function render(arr) {
 const observer = new IntersectionObserver(async (entries) => {
     const entry = entries[0];
 
-    if (!entry.isIntersecting || !keyword || isLoading) return;
+    if (!entry.isIntersecting || isLoading) return;
 
     isLoading = true;
 
