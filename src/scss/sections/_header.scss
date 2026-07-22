@@ -1,0 +1,79 @@
+.header-title{
+    color: #DC56C5;
+text-align: center;
+-webkit-text-stroke-width: 1px;
+-webkit-text-stroke-color: #000;
+font-family: Montserrat;
+font-size: 38px;
+font-style: normal;
+font-weight: 900;
+line-height: normal;    
+ margin: 0 0 27px;
+ width: 0 auto;
+
+ @media screen and (min-width: 768px) {
+          font-size: 50px; 
+          margin: 0 0 52px;
+    }
+
+    @media screen and (min-width: 480px) {
+          
+    }
+}
+.header {
+    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 500px;
+  background:url(/src/img/pic.png) no-repeat center/cover;
+  padding: 40px 20px;
+  overflow: hidden;   /* по вертикалі */
+}
+.header-img{
+    position: absolute;
+  top: 0;
+  left: 0;
+   background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  padding: 30px 60px 60px 30px;
+}
+.header-logo{
+        position: absolute;
+    top: -10px;
+    left: -10px;
+    width: 200px;
+
+    @media screen and (min-width: 768px) {
+        width: 250px;   
+    }
+}
+.header-search {
+    display: flex;
+    gap: 30px;
+}
+
+.header-list,
+.header-input{
+    width: 320px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(5px);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 25px;
+  color: #939393;
+  font-size: 16px;
+  outline: none;
+}
+.header-inputs{
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+}
+
+.header-list option{
+    appearance: none; 
+  cursor: pointer;
+   background: black;
+}
