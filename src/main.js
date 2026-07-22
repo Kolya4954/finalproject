@@ -33,7 +33,8 @@ keywordInputEl.addEventListener("input", debounce(async () => {
 
     listEl.innerHTML = "";
     const res = await getEvents(keyword, page)
-
+    console.log(res);
+    
     render(res._embedded?.events || [])
 }, 500)
 )
@@ -60,21 +61,6 @@ function render(arr) {
 
     listEl.insertAdjacentHTML("beforeend", item);
 }
-
-// const observer = new IntersectionObserver((entry) => {
-//     entry.forEach(async (e) => {
-//         if (e.isIntersecting && keyword !== "") {
-//             page += 1
-//             const res = await getEvents(keyword, page)
-//             render(res)
-//             console.log(page);
-            
-//         }
-//     })
-// }, {
-//     rootMargin: "200px"
-// })
-// observer.observe(loaderEl)
 
 const observer = new IntersectionObserver(async (entries) => {
     const entry = entries[0];
