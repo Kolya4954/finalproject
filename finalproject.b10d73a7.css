@@ -55,87 +55,57 @@ body {
   }
 }
 
-.header-title {
-  color: #dc56c5;
-  text-align: center;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #000;
-  width: 0 auto;
-  margin: 0 0 27px;
-  font-family: Montserrat;
-  font-size: 38px;
-  font-style: normal;
-  font-weight: 900;
-  line-height: normal;
+.main-list {
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px 53px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
 }
 
-@media screen and (width >= 768px) {
-  .header-title {
-    margin: 0 0 52px;
-    font-size: 50px;
-  }
-}
-
-.header {
-  background: url("pic.0ae20d68.png") center / cover no-repeat;
-  flex-direction: column;
+.event-card {
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  min-height: 500px;
-  padding: 40px 20px;
-  display: flex;
-  position: relative;
-  overflow: hidden;
-}
-
-.header-img {
-  background: linear-gradient(135deg, #000000e6 0%, #0000 100%);
-  padding: 30px 60px 60px 30px;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.header-logo {
-  width: 200px;
-  position: absolute;
-  top: -10px;
-  left: -10px;
-}
-
-@media screen and (width >= 768px) {
-  .header-logo {
-    width: 250px;
-  }
-}
-
-.header-search {
-  gap: 30px;
+  gap: 5px;
+  width: 198px;
+  height: 322px;
   display: flex;
 }
 
-.header-list, .header-input {
-  backdrop-filter: blur(5px);
-  color: #939393;
-  background-color: #ffffff26;
-  border: 1px solid #ffffff1a;
-  border-radius: 50px;
-  outline: none;
-  width: 320px;
-  height: 50px;
-  padding: 0 25px;
+.img {
+  border-radius: 50px 0;
+  width: 180px;
+  height: 227px;
+}
+
+.name {
+  color: #dc56c5;
+  text-align: center;
+  width: 183px;
+  min-width: 0;
+  height: 20px;
   font-size: 16px;
+  font-weight: 700;
 }
 
-.header-inputs {
-  justify-content: center;
-  gap: 30px;
-  display: flex;
+.date {
+  color: #fff;
+  text-align: center;
+  width: 95px;
+  height: 20px;
+  font-size: 16px;
+  font-weight: 400;
 }
 
-.header-list option {
-  appearance: none;
-  cursor: pointer;
-  background: #000;
+.city {
+  color: #fff;
+  text-align: center;
+  width: 126px;
+  height: 17px;
+  font-size: 14px;
+  font-weight: 600;
 }
 /*# sourceMappingURL=finalproject.b10d73a7.css.map */

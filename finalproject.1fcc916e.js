@@ -714,10 +714,167 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"fILKw":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _getEvent = require("./js/getEvent");
+var _debounce = require("debounce");
+var _debounceDefault = parcelHelpers.interopDefault(_debounce);
+const listEl = document.querySelector(".main-list");
+const keywordInputEl = document.querySelector(".header-input");
+const loaderEl = document.querySelector(".loader");
+const URL = "https://app.ticketmaster.com/discovery/v2/events.json";
+const API_KEY = "hXUd5IDKsavTl95aAOfGkyFDSk68VDlw";
+let keyword = "";
+let country = "";
+let page = 1;
+let isLoading = false;
+async function getEvents(keyword, page) {
+    const res = await fetch(`${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}`);
+    const data = await res.json();
+    return data;
+}
+keywordInputEl.addEventListener("input", (0, _debounceDefault.default)(async ()=>{
+    keyword = keywordInputEl.value.trim();
+    page = 1;
+    listEl.innerHTML = "";
+    const res = await getEvents(keyword, page);
+    console.log(res);
+    render(res._embedded?.events || []);
+}, 500));
+function render(arr) {
+    const item = arr.map((e)=>{
+        const image = e.images[0]?.url;
+        const name = e.name.length > 17 ? e.name.slice(0, 17) + "..." : e.name;
+        const date = e.dates.start.localDate;
+        const city = e._embedded?.venues[0]?.city?.name || "Unknown";
+        return `
+        <li class="event-card">
+            <img src="${image}" alt="${name}" class="img">
 
-},{"./js/getEvent":"gubPw"}],"gubPw":[function(require,module,exports,__globalThis) {
-console.log("hello world!");
+            <h2 class="name">${name}</h2>
+
+            <p class="date">${date}</p>
+
+            <p class="city">${city}</p>
+        </li>`;
+    }).join("");
+    listEl.insertAdjacentHTML("beforeend", item);
+}
+const observer = new IntersectionObserver(async (entries)=>{
+    const entry = entries[0];
+    if (!entry.isIntersecting || isLoading) return;
+    isLoading = true;
+    page += 1;
+    const res = await getEvents(keyword, page);
+    render(res._embedded?.events || []);
+    isLoading = false;
+}, {
+    rootMargin: "200px"
+});
+observer.observe(loaderEl);
+async function init() {
+    page = 1;
+    const events = await getEvents("", page);
+    render(events._embedded?.events || []);
+}
+init();
+
+},{"./js/getEvent":"gubPw","debounce":"7NAJV","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gubPw":[function(require,module,exports,__globalThis) {
+
+},{}],"7NAJV":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>debounce);
+function debounce(function_, wait = 100, options = {}) {
+    if (typeof function_ !== 'function') throw new TypeError(`Expected the first parameter to be a function, got \`${typeof function_}\`.`);
+    if (wait < 0) throw new RangeError('`wait` must not be negative.');
+    if (typeof options === 'boolean') throw new TypeError('The `options` parameter must be an object, not a boolean. Use `{immediate: true}` instead.');
+    const { immediate } = options;
+    let storedContext;
+    let storedArguments;
+    let timeoutId;
+    let timestamp;
+    let result;
+    function run() {
+        const callContext = storedContext;
+        const callArguments = storedArguments;
+        storedContext = undefined;
+        storedArguments = undefined;
+        result = function_.apply(callContext, callArguments);
+        return result;
+    }
+    function later() {
+        const last = Date.now() - timestamp;
+        if (last < wait && last >= 0) timeoutId = setTimeout(later, wait - last);
+        else {
+            timeoutId = undefined;
+            if (!immediate) result = run();
+        }
+    }
+    const debounced = function(...arguments_) {
+        if (storedContext && this !== storedContext && Object.getPrototypeOf(this) === Object.getPrototypeOf(storedContext)) throw new Error('Debounced method called with different contexts of the same prototype.');
+        storedContext = this; // eslint-disable-line unicorn/no-this-assignment
+        storedArguments = arguments_;
+        timestamp = Date.now();
+        const callNow = immediate && !timeoutId;
+        if (!timeoutId) timeoutId = setTimeout(later, wait);
+        if (callNow) {
+            result = run();
+            return result;
+        }
+        return undefined;
+    };
+    Object.defineProperty(debounced, 'isPending', {
+        get () {
+            return timeoutId !== undefined;
+        }
+    });
+    debounced.clear = ()=>{
+        if (!timeoutId) return;
+        clearTimeout(timeoutId);
+        timeoutId = undefined;
+        storedContext = undefined;
+        storedArguments = undefined;
+    };
+    debounced.flush = ()=>{
+        if (!timeoutId) return;
+        debounced.trigger();
+    };
+    debounced.trigger = ()=>{
+        result = run();
+        debounced.clear();
+    };
+    return debounced;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"jnFvT":[function(require,module,exports,__globalThis) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}]},["iUuJv","fILKw"], "fILKw", "parcelRequire31f1", {})
 
