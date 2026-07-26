@@ -52,6 +52,10 @@ body {
   }
 }
 
+.main {
+  margin-top: 133px;
+}
+
 .main-list {
   display: flex;
   justify-content: center;
@@ -72,6 +76,13 @@ body {
   justify-content: center;
   gap: 5px;
   flex-wrap: wrap;
+  transition: all 250ms;
+}
+
+.event-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid white;
 }
 
 .img {
@@ -106,4 +117,8 @@ body {
   text-align: center;
   font-size: 14px;
   font-weight: 600;
+}
+
+.animate__animated {
+  animation-duration: 1s !important;
 }/*# sourceMappingURL=main.css.map */

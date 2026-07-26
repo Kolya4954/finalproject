@@ -1,9 +1,11 @@
 import "./js/getEvent"
 import debounce from 'debounce';
+import 'animate.css';
 
 const listEl = document.querySelector(".main-list");
 const keywordInputEl = document.querySelector(".header-input");
 const loaderEl = document.querySelector(".loader");
+const countryEl = document.querySelector(".header-list")
 
 const URL = "https://app.ticketmaster.com/discovery/v2/events.json";
 const API_KEY = "hXUd5IDKsavTl95aAOfGkyFDSk68VDlw";
@@ -13,7 +15,7 @@ let country = "";
 let page = 1;
 let isLoading = false
 
-async function getEvents(keyword, page) {
+async function getEvents(keyword, page, country) {
     const res = await fetch(
         `${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}`
     )
@@ -39,6 +41,10 @@ keywordInputEl.addEventListener("input", debounce(async () => {
 }, 500)
 )
 
+// countryEl.addEventListener("", () => {
+
+// })
+
 
 function render(arr) {
     const item = arr.map((e) => {
@@ -48,7 +54,7 @@ function render(arr) {
     const date = e.dates.start.localDate;
     const city = e._embedded?.venues[0]?.city?.name || "Unknown";
     return `
-        <li class="event-card">
+        <li class="event-card animate__animated animate__fadeIn animate__slow">
             <img src="${image}" alt="${name}" class="img">
 
             <h2 class="name">${name}</h2>
