@@ -21,12 +21,11 @@ let isLoading = false
 
 async function getEvents(keyword, page, country) {
     const res = await fetch(
-        `${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}`
+        `${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}&countryCode=${country}&locale=*`
     )
-    
+
     const data = await res.json();
-  
-    
+
     return data
 }
 
@@ -38,12 +37,21 @@ keywordInputEl.addEventListener("input", debounce(async () => {
     page = 1;
 
     listEl.innerHTML = "";
-    const res = await getEvents(keyword, page)
+    const res = await getEvents(keyword, page, country)
     console.log(res);
     
     render(res._embedded?.events || [])
 }, 500)
 )
+
+countryEl.addEventListener("change", async () => {
+    country = countryEl.value;
+    page = 1;
+    listEl.innerHTML = "";
+
+    const res = await getEvents(keyword, page, country);
+    render(res._embedded?.events || []);
+});
 
 function render(arr) {
     const item = arr.map((e) => {
@@ -76,7 +84,7 @@ const observer = new IntersectionObserver(async (entries) => {
 
     page += 1;
 
-    const res = await getEvents(keyword, page);
+    const res = await getEvents(keyword, page, country);
     render(res._embedded?.events || []);
 
     isLoading = false;
@@ -88,7 +96,7 @@ observer.observe(loaderEl);
 
 async function init() {
     page = 1
-    const events = await getEvents("", page);
+    const events = await getEvents("", page, country);
 
     render(events._embedded?.events || []);
 }
