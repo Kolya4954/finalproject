@@ -202,6 +202,10 @@ const closeModal = () => {
   backdrop.remove();
 };
 
+
+
+
+
 backdrop.querySelector(".modal-close-btn").onclick = closeModal;
 
 backdrop.onclick = (e) => {
