@@ -715,20 +715,21 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"fILKw":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _getEvent = require("./js/getEvent");
 var _debounce = require("debounce");
 var _debounceDefault = parcelHelpers.interopDefault(_debounce);
+var _animateCss = require("animate.css");
 const listEl = document.querySelector(".main-list");
 const keywordInputEl = document.querySelector(".header-input");
 const loaderEl = document.querySelector(".loader");
+const countryEl = document.querySelector(".header-list");
 const URL = "https://app.ticketmaster.com/discovery/v2/events.json";
 const API_KEY = "hXUd5IDKsavTl95aAOfGkyFDSk68VDlw";
 let keyword = "";
 let country = "";
 let page = 1;
 let isLoading = false;
-async function getEvents(keyword, page) {
-    const res = await fetch(`${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}`);
+async function getEvents(keyword, page, country) {
+    const res = await fetch(`${URL}?apikey=${API_KEY}&keyword=${keyword}&page=${page}&countryCode=${country}&locale=*`);
     const data = await res.json();
     return data;
 }
@@ -736,10 +737,17 @@ keywordInputEl.addEventListener("input", (0, _debounceDefault.default)(async ()=
     keyword = keywordInputEl.value.trim();
     page = 1;
     listEl.innerHTML = "";
-    const res = await getEvents(keyword, page);
+    const res = await getEvents(keyword, page, country);
     console.log(res);
     render(res._embedded?.events || []);
 }, 500));
+countryEl.addEventListener("change", async ()=>{
+    country = countryEl.value;
+    page = 1;
+    listEl.innerHTML = "";
+    const res = await getEvents(keyword, page, country);
+    render(res._embedded?.events || []);
+});
 function render(arr) {
     const item = arr.map((e)=>{
         const image = e.images[0]?.url;
@@ -747,7 +755,9 @@ function render(arr) {
         const date = e.dates.start.localDate;
         const city = e._embedded?.venues[0]?.city?.name || "Unknown";
         return `
-        <li class="event-card">
+        <li class="event-card animate__animated animate__fadeIn animate__slow"
+        data-id="${e.id}"
+        >
             <img src="${image}" alt="${name}" class="img">
 
             <h2 class="name">${name}</h2>
@@ -764,7 +774,7 @@ const observer = new IntersectionObserver(async (entries)=>{
     if (!entry.isIntersecting || isLoading) return;
     isLoading = true;
     page += 1;
-    const res = await getEvents(keyword, page);
+    const res = await getEvents(keyword, page, country);
     render(res._embedded?.events || []);
     isLoading = false;
 }, {
@@ -773,14 +783,93 @@ const observer = new IntersectionObserver(async (entries)=>{
 observer.observe(loaderEl);
 async function init() {
     page = 1;
-    const events = await getEvents("", page);
+    const events = await getEvents("", page, country);
     render(events._embedded?.events || []);
 }
-init();
+if (listEl) listEl.addEventListener("click", async (e)=>{
+    const card = e.target.closest(".event-card");
+    if (!card) return;
+    const res = await fetch(`https://app.ticketmaster.com/discovery/v2/events/${card.dataset.id}.json?apikey=${API_KEY}`);
+    const event = await res.json();
+    openModal(event);
+});
+function truncateText(text, maxLength = 100) {
+    if (!text) return "no info";
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength).trim() + "...";
+}
+function getTicketUrl(event) {
+    return event.url || event._links?.self?.href || "#";
+}
+function getPriceText(event) {
+    const price = event.priceRanges?.[0];
+    if (!price) return "You can look at our Website";
+    const min = price.min ?? 0;
+    const max = price.max ?? min;
+    const currency = price.currency || "UAH";
+    return min === max ? `${min} ${currency}` : `${min}-${max} ${currency}`;
+}
+function openModal(event) {
+    const venue = event._embedded?.venues?.[0];
+    const imgUrl = event.images?.[0]?.url || "";
+    const authorName = event._embedded?.attractions?.[0]?.name || "Artist";
+    const rawInfo = event.info || event.pleaseNote || "Sorry, no info.";
+    const formattedInfo = truncateText(rawInfo, 100);
+    const ticketUrl = getTicketUrl(event);
+    const priceText = getPriceText(event);
+    const backdrop = document.createElement("div");
+    backdrop.classList.add("backdrop");
+    backdrop.innerHTML = `
+    <div class="modal">
+      <button class="modal-close-btn" type="button">\u{2715}</button>
+      
+      <div class="circle-thumb">
+        <img class="circle" src="${imgUrl}" alt="${authorName}">
+      </div>
 
-},{"./js/getEvent":"gubPw","debounce":"7NAJV","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"gubPw":[function(require,module,exports,__globalThis) {
+      <div class="in-modal">
+        <img class="modal-img" src="${imgUrl}" alt="${authorName}">
 
-},{}],"7NAJV":[function(require,module,exports,__globalThis) {
+        <div class="modal-text">
+          <h2 class="modal-h2">INFO</h2>
+          <p class="main-modal-text">${formattedInfo}</p>
+
+          <h2 class="modal-h2">WHEN</h2>
+          <p class="main-modal-text">${event.dates?.start?.localDate || "TBA"}<br>${event.dates?.start?.localTime || ""} (${event.dates?.timezone || ""})</p>
+
+          <h2 class="modal-h2">WHERE</h2>
+          <p class="main-modal-text">${venue?.city?.name || ""}, ${venue?.country?.name || ""}<br>${venue?.name || ""}</p>
+
+          <h2 class="modal-h2">WHO</h2>
+          <p class="main-modal-text">${authorName}</p>
+
+          <h2 class="modal-h2">PRICES</h2>
+          <p class="main-modal-text">${priceText}</p>
+
+          <a class="modal-button modal-tickets" href="${ticketUrl}" target="_blank" rel="noopener noreferrer">BUY TICKETS</a>
+        </div>
+      </div>
+
+      <button class="modal-Author" type="button">MORE FROM THIS AUTHOR</button>
+    </div>
+  `;
+    function handleEsc1(e) {
+        if (e.key === "Escape") closeModal();
+    }
+    const closeModal = ()=>{
+        document.removeEventListener("keydown", handleEsc1);
+        backdrop.remove();
+    };
+    backdrop.querySelector(".modal-close-btn").onclick = closeModal;
+    backdrop.onclick = (e)=>{
+        if (e.target === backdrop) closeModal();
+    };
+    document.addEventListener("keydown", handleEsc1);
+    document.body.appendChild(backdrop);
+}
+document.addEventListener("keydown", handleEsc);
+
+},{"debounce":"7NAJV","animate.css":"8t3va","@parcel/transformer-js/src/esmodule-helpers.js":"jnFvT"}],"7NAJV":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>debounce);
@@ -876,6 +965,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["iUuJv","fILKw"], "fILKw", "parcelRequire31f1", {})
+},{}],"8t3va":[function() {},{}]},["iUuJv","fILKw"], "fILKw", "parcelRequire31f1", {})
 
 //# sourceMappingURL=finalproject.1fcc916e.js.map
