@@ -222,4 +222,46 @@ body {
 
 .animate__animated {
   animation-duration: 1s !important;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-top {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.modal-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.modal-body {
+  display: flex;
+  gap: 40px;
+}
+
+.modal-poster {
+  width: 320px;
+  border-radius: 20px;
+}
+
+.modal-info {
+  flex: 1;
+}
+
+.modal-info h3 {
+  color: #dc56c5;
+  margin-bottom: 8px;
+}
+
+.modal-info p {
+  margin-bottom: 20px;
 }/*# sourceMappingURL=main.css.map */
