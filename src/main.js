@@ -93,7 +93,10 @@ const observer = new IntersectionObserver(async (entries) => {
     rootMargin: "200px"
 });
 
+
 observer.observe(loaderEl);
+
+
 
 async function init() {
     page = 1
