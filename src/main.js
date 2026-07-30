@@ -197,6 +197,10 @@ function openModal(event) {
   }
 }
 
+
+
+
+
 const closeModal = () => {
   document.removeEventListener("keydown", handleEsc);
   backdrop.remove();
